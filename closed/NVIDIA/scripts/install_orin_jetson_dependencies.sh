@@ -14,10 +14,6 @@
 # limitations under the License.
 
 # Set MLPERF_PATH & MLPERF_SCRATCH_PATH in environment
-echo 'export MLPERF_SCRATCH_PATH=$HOME/scratch' >> ~/.bashrc
-echo 'export MLPERF_PATH=$HOME/inference_results_v2.0' >> ~/.bashrc
-source ~/.bashrc
-
 if [[ -z "$MLPERF_PATH" ]]; then
 	echo "Must provide MLPERF_PATH in environment" 1>&2
 	exit 1
