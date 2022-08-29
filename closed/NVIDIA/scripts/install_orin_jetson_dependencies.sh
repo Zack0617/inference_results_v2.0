@@ -124,38 +124,9 @@ if [[ -e ../../scripts/install_orin_jetson_dependencies_internal.sh ]]; then \
   bash ../../scripts/install_orin_jetson_dependencies_internal.sh ; fi
 
 # DALI
-# building from scratch takes ~45 minutes
-rm -rf protobuf-cpp-3.11.1.tar.gz \
- && wget https://github.com/protocolbuffers/protobuf/releases/download/v3.11.1/protobuf-cpp-3.11.1.tar.gz \
- && tar -xzf protobuf-cpp-3.11.1.tar.gz \
- && rm protobuf-cpp-3.11.1.tar.gz \
- && cd protobuf-3.11.1 \
- && ./configure CXXFLAGS="-fPIC" --prefix=/usr/local --disable-shared \
- && make -j$(nproc) \
- && sudo make install \
- && sudo ldconfig \
- && cd /tmp \
- && rm -rf protobuf-3.11.1 \
- && cd /usr/local \
- && sudo rm -rf DALI \
- && sudo git clone -b release_v0.31 --recursive https://github.com/NVIDIA/DALI \
- && cd DALI \
- && sudo git cherry-pick a197624d1fa6bcd200cd80eaad63d9ef75b7e635 \
- && sudo git cherry-pick 9172030b4841282ee5ff9a2ff256f80fef819e74 \
- && sudo mkdir build \
- && cd build \
- && sudo -E cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCUDA_TARGET_ARCHS="87" \
-    -DBUILD_PYTHON=ON -DBUILD_TEST=OFF -DBUILD_BENCHMARK=OFF -DBUILD_LMDB=OFF -DBUILD_NVTX=OFF -DBUILD_NVJPEG=OFF \
-    -DBUILD_LIBTIFF=OFF -DBUILD_NVOF=OFF -DBUILD_NVDEC=OFF -DBUILD_LIBSND=OFF -DBUILD_NVML=OFF -DBUILD_FFTS=ON \
-    -DVERBOSE_LOGS=OFF -DWERROR=OFF -DBUILD_WITH_ASAN=OFF -DProtobuf_PROTOC_EXECUTABLE=/usr/local/bin/protoc .. \
- && sudo -E make -j$(nproc) \
- && sudo -E make install \
- && sudo -E python3 -m pip install dali/python/ \
- && sudo mv /usr/local/DALI/build/dali/python/nvidia/dali /tmp/dali \
- && sudo rm -rf /usr/local/DALI \
- && sudo mkdir -p /usr/local/DALI/build/dali/python/nvidia/ \
- && sudo mv /tmp/dali /usr/local/DALI/build/dali/python/nvidia/ \
- && cd /tmp
+# Install DALI from https://developer.download.nvidia.com/compute/redist/nvidia-dali-cuda110
+pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/ nvidia-dali-cuda110==0.31.0 \
+ && pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/ nvidia-dali-tf-plugin-cuda110==0.31.0
 
 # Install ONNX graph surgeon, needed for 3D-Unet ONNX preprocessing.
 cd /tmp \
