@@ -20,7 +20,10 @@ if [[ -z "$MLPERF_PATH" ]]; then
 fi
 
 # Create a symlink for python 3.8
-sudo ln -sf /usr/bin/python3 /usr/bin/python
+sudo ln -sf /usr/bin/python3 /usr/bin/python \
+ && sudo apt-get install python3-pip \
+ && python3 -m pip install --upgrade pip \
+ && pip3 install testresources
 
 sudo apt install -y python3.8-dev \
   && sudo apt install -y virtualenv moreutils libnuma-dev numactl sshpass \
